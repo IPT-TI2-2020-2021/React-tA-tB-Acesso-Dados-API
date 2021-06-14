@@ -40,7 +40,17 @@ class App extends React.Component {
       /**
        * array que irá conter os dados das Fotos, vindas da API
        */
-      fotos: []
+      fotos: [],
+      /**
+       * variável para conter o 'estado' da app, 
+       * no carregamento dos dados das Fotografias, da API
+       * @type {"carregando dados" | "sucesso" | "erro"}
+       */
+      loadState: "",
+      /**
+       * guarda a mensagem de erro, se algo correr mal
+       */
+      errorMessage: null
     }
   }
 
@@ -62,14 +72,21 @@ class App extends React.Component {
      */
     try {
       // 1.
+      this.setState({ loadState: "carregando dados" });
+
       let fotosVindosDaAPI = await getFotos();
 
       // 2.
       // esta não é a forma correta: this.state.fotos = fotosVindosDaAPI;
       this.setState({
-        fotos: fotosVindosDaAPI
+        fotos: fotosVindosDaAPI,
+        loadState: "sucesso"
       });
     } catch (erro) {
+      this.setState({
+        loadState: "erro",
+        errorMessage: erro.toString()
+      });
       console.error("Erro na leitura das fotos da API", erro);
     }
   }
@@ -77,14 +94,27 @@ class App extends React.Component {
 
   render() {
     const { fotos } = this.state;
-    return (
-      <div className="container">
-        {/* este componente - Tabela - irá apresentar os dados das 'fotos' no ecrã
-            as 'fotos' devem ser lidas na API */}
-        <Tabela dadosFotos={fotos} />
-      </div>)
-  }
 
+    // determinar o comportamento do 'componente',
+    // em função do seu estado
+    switch (this.state.loadState) {
+      case "carregando dados":
+        return <p>A carregar dados. Aguarde, por favor...</p>
+      case "erro":
+        return <p>Ocorreu um erro:
+                {this.state.errorMessage + '.' ?? "Não sabemos qual..."}</p>
+      case "sucesso":
+        return (
+          <div className="container">
+            {/* este componente - Tabela - irá apresentar os dados das 'fotos' no ecrã
+            as 'fotos' devem ser lidas na API */}
+            <Tabela dadosFotos={fotos} />
+          </div>)
+      default:
+        return null;
+    }
+
+  }
 }
 
 export default App;

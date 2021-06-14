@@ -50,7 +50,7 @@ class Tabela extends React.Component {
         const { dadosFotos } = this.props
 
         return (
-            <table className="table table-striped table-success">
+            <table className="table table-striped">
                 <CabecalhoTabela />
                 {/* o parâmetro 'dadosFotos' irá receber
                     os dados que vêm da componente 'mãe' */}
