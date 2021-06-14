@@ -42,7 +42,25 @@ async function getCaes() {
   return await resposta.json();
 }
 
+/**
+ * Função para enviar os dados da nova fotografia para a API
+ * @param {} novaFotografia 
+ */
+async function adicionaFoto(novaFotografia) {
+  let resposta = await fetch("api/FotografiasAPI",
+    {
+      method: "POST",
+      body: JSON.stringify(novaFotografia),
+      headers: { "Content-Type": "application/json" }
+    }
+  );
 
+  if (!resposta.ok) {
+    // não foi recebido o código 200 do HTTP
+    console.error("Não conseguimos escrever os dados na API. Código: " + resposta.status);
+  }
+  return await resposta.json();
+}
 
 
 /**
@@ -146,6 +164,37 @@ class App extends React.Component {
   }
 
 
+  /**
+   * Recebe os dados do Formulário e envio-os para a API
+   * @param {*} dadosDaFotoACarregar - dados recebidos
+   */
+  handlerGuardaFoto = async (dadosDaFotoACarregar) => {
+    // Tarefas
+    // 1. gerar os dados a exportar
+    // 2. enviá-los para a API
+    // 3. efetuar o Reload da tabela
+
+    // 1. - já está feito. É o parâmetro de entrada nesta função
+
+    try {
+      // 2. 
+      let fotoCriada = await adicionaFoto(dadosDaFotoACarregar);
+
+      // atualizar o STATE
+      this.setState({
+        fotos: [...this.state.fotos, fotoCriada]
+      });
+
+      // 3.
+      await this.LoadFotos;
+
+    } catch (erro) {
+      console.error("não consegui inserir os dados da fotografia", erro);
+    }
+
+  }
+
+
   render() {
     // recuperar os dados do 'state' para usar dentro deste método
     const { fotos, caes } = this.state;
@@ -161,8 +210,13 @@ class App extends React.Component {
       case "sucesso":
         return (
           <div className="container">
-            {/* adição do Formulário que há-de recolher os dados da nova fotografia */}
-            <Formulario dadosCaes={caes} />
+            {/* adição do Formulário que há-de recolher os dados da nova fotografia
+                   - dadosCaes: parâmetro de Entrada no componente
+                   - dadosRecolhidos: parâmetro de Saída (exportação) do componente
+            */}
+            <Formulario dadosCaes={caes}
+              dadosRecolhidos={this.handlerGuardaFoto}
+            />
 
             {/* este componente - Tabela - irá apresentar os dados das 'fotos' no ecrã
             as 'fotos' devem ser lidas na API */}
