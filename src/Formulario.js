@@ -18,7 +18,12 @@ const EscolheCao = (props) => {
     // criação do objeto <SELECT></SELECT>
     // este mesmo objeto, também tem de ser capaz de exportar os dados escolhidos pelo utilizador
     // o parâmetro 'idCaoEscolhido' irá receber o ID do cão que foi escolhido
-    return (<select onChange={props.idCaoEscolhido}>{opcoes}</select>)
+    return (
+        <select required onChange={props.idCaoEscolhido}>
+            <option value="">Escolha um cão</option>
+            {opcoes}
+        </select>
+    )
 }
 
 
@@ -70,6 +75,15 @@ class Formulario extends React.Component {
      * @param {*} evento - contém o dado (local da Foto) escrito pelo utilizador
      */
     handlerLocalChange = (evento) => {
+        // validação do conteúdo do texto inserido
+        if (/\d/.test(evento.target.value)) {
+            evento.target.setCustomValidity("Não são permitidos números aqui.")
+            return;
+        } else {
+            evento.target.setCustomValidity("")
+        }
+
+        // devolve os dados recolhidos
         this.setState({ localDaFoto: evento.target.value });
     }
 
@@ -85,7 +99,7 @@ class Formulario extends React.Component {
     /**
      * função que irá exportar os dados para fora do Formulário
      */
-     handlerSubmitForm = (evento) => {
+    handlerSubmitForm = (evento) => {
         // impede que o Browser efetue o submit do formulário
         // essa tarefa será efetuada pelo React
         evento.preventDefault();
@@ -112,9 +126,15 @@ class Formulario extends React.Component {
             // o 'return' só consegue devolver UM objeto
             <form onSubmit={this.handlerSubmitForm} encType="multipart/form-data">
                 Fotografia: <input type="file"
+                    required
+                    accept=".jpg,.png"
                     onChange={this.handlerFotoChange} /><br />
-                Data da Foto: <input type="date" value={this.state.dataDaFoto} onChange={this.handlerDataChange} /><br />
-                Local da Foto: <input type="text" value={this.state.localDaFoto} onChange={this.handlerLocalChange} /><br />
+                Data da Foto: <input type="date"
+                    required
+                    max={new Date().toISOString().split("T")[0]}
+                    value={this.state.dataDaFoto}
+                    onChange={this.handlerDataChange} /><br />
+                Local da Foto: <input type="text" required value={this.state.localDaFoto} onChange={this.handlerLocalChange} /><br />
                 {/* o componente 'EscolheCao' irá ter dois parâmetros:
                         - listaCaes: serve para introduzir no componente a lista dos cães a representar na dropdown
                         - idCaoEscolhido: serve para retirar do componente o ID do cão que o utilizador escolheu,
