@@ -33,7 +33,7 @@ class Formulario extends React.Component {
 
         // variáveis para guardar os dados introduzidos pelo utilizador, no Formulário
         this.state = {
-            nomeDaFoto: "",
+            fichFoto: null,
             localDaFoto: "",
             dataDaFoto: "",
             idDoCao: ""
@@ -46,7 +46,7 @@ class Formulario extends React.Component {
      * @param {*} evento - contém o dado (nome da Foto) escrito pelo utilizador
      */
     handlerFotoChange = (evento) => {
-        this.setState({ nomeDaFoto: evento.target.value });
+        this.setState({ fichFoto: evento.target.files[0] });
     }
 
 
@@ -92,7 +92,7 @@ class Formulario extends React.Component {
 
         // preparar os dados a serem enviados para a API
         let dadosForm = {
-            Fotografia: this.state.nomeDaFoto,
+            UploadFotografia: this.state.fichFoto,
             Local: this.state.localDaFoto,
             DataFoto: this.state.dataDaFoto,
             CaoFK: this.state.idDoCao
@@ -110,9 +110,8 @@ class Formulario extends React.Component {
 
         return (
             // o 'return' só consegue devolver UM objeto
-            <form onSubmit={this.handlerSubmitForm}>
-                Fotografia: <input type="text"
-                    value={this.state.nomeDaFoto}
+            <form onSubmit={this.handlerSubmitForm} encType="multipart/form-data">
+                Fotografia: <input type="file"
                     onChange={this.handlerFotoChange} /><br />
                 Data da Foto: <input type="date" value={this.state.dataDaFoto} onChange={this.handlerDataChange} /><br />
                 Local da Foto: <input type="text" value={this.state.localDaFoto} onChange={this.handlerLocalChange} /><br />

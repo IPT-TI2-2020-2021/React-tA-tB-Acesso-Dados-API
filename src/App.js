@@ -47,13 +47,18 @@ async function getCaes() {
  * @param {} novaFotografia 
  */
 async function adicionaFoto(novaFotografia) {
-  let resposta = await fetch("api/FotografiasAPI",
-    {
-      method: "POST",
-      body: JSON.stringify(novaFotografia),
-      headers: { "Content-Type": "application/json" }
-    }
-  );
+  // https://developer.mozilla.org/pt-BR/docs/Web/API/FormData
+  // https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
+  let formData = new FormData();
+  formData.append("UploadFotografia", novaFotografia.UploadFotografia);
+  formData.append("DataFoto", novaFotografia.DataFoto);
+  formData.append("Local", novaFotografia.Local);
+  formData.append("CaoFK", novaFotografia.CaoFK);
+
+  let resposta = await fetch("api/FotografiasAPI", {
+    method: "POST",
+    body: formData
+  });
 
   if (!resposta.ok) {
     // não foi recebido o código 200 do HTTP
