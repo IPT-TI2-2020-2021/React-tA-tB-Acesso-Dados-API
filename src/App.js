@@ -228,9 +228,11 @@ class App extends React.Component {
                    - dadosCaes: parâmetro de Entrada no componente
                    - dadosRecolhidos: parâmetro de Saída (exportação) do componente
             */}
+            <h4>Inserir uma nova foto:</h4>
             <Formulario dadosCaes={caes}
               dadosRecolhidos={this.handlerGuardaFoto}
             />
+            <hr />
 
             {/* este componente - Tabela - irá apresentar os dados das 'fotos' no ecrã
             as 'fotos' devem ser lidas na API */}

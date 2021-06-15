@@ -19,7 +19,7 @@ const EscolheCao = (props) => {
     // este mesmo objeto, também tem de ser capaz de exportar os dados escolhidos pelo utilizador
     // o parâmetro 'idCaoEscolhido' irá receber o ID do cão que foi escolhido
     return (
-        <select required onChange={props.idCaoEscolhido}>
+        <select required className="form-select" onChange={props.idCaoEscolhido}>
             <option value="">Escolha um cão</option>
             {opcoes}
         </select>
@@ -125,24 +125,36 @@ class Formulario extends React.Component {
         return (
             // o 'return' só consegue devolver UM objeto
             <form onSubmit={this.handlerSubmitForm} encType="multipart/form-data">
-                Fotografia: <input type="file"
-                    required
-                    accept=".jpg,.png"
-                    onChange={this.handlerFotoChange} /><br />
+                <div className="row">
+                    <div className="col-md-4">
+                        Fotografia: <input type="file"
+                            required
+                            accept=".jpg,.png"
+                            className="form-control"
+                            onChange={this.handlerFotoChange} /><br />
                 Data da Foto: <input type="date"
-                    required
-                    max={new Date().toISOString().split("T")[0]}
-                    value={this.state.dataDaFoto}
-                    onChange={this.handlerDataChange} /><br />
-                Local da Foto: <input type="text" required value={this.state.localDaFoto} onChange={this.handlerLocalChange} /><br />
-                {/* o componente 'EscolheCao' irá ter dois parâmetros:
+                            required
+                            max={new Date().toISOString().split("T")[0]}
+                            value={this.state.dataDaFoto}
+                            className="form-control"
+                            onChange={this.handlerDataChange} /><br />
+                    </div>
+                    <div className="col-md-4">
+                        Local da Foto: <input type="text"
+                            required
+                            value={this.state.localDaFoto}
+                            className="form-control"
+                            onChange={this.handlerLocalChange} /><br />
+                        {/* o componente 'EscolheCao' irá ter dois parâmetros:
                         - listaCaes: serve para introduzir no componente a lista dos cães a representar na dropdown
                         - idCaoEscolhido: serve para retirar do componente o ID do cão que o utilizador escolheu,
                                           que será entregue ao 'handlerCaoChange' */}
                 Cão: <EscolheCao listaCaes={dadosCaes}
-                    idCaoEscolhido={this.handlerCaoChange}
-                /><br />
-                <input type="submit" value="Adicionar foto" />
+                            idCaoEscolhido={this.handlerCaoChange}
+                        /><br />
+                    </div>
+                </div>
+                <input type="submit" value="Adicionar foto" className="btn btn-outline-primary" />
             </form>
         )
     }
