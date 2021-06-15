@@ -94,7 +94,7 @@ class Formulario extends React.Component {
         let dadosForm = {
             Fotografia: this.state.nomeDaFoto,
             Local: this.state.localDaFoto,
-            DataFoto: this.dataDaFoto,
+            DataFoto: this.state.dataDaFoto,
             CaoFK: this.state.idDoCao
         };
 

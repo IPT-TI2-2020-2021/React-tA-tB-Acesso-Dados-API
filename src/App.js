@@ -178,16 +178,25 @@ class App extends React.Component {
 
     try {
       // 2. 
-      let fotoCriada = await adicionaFoto(dadosDaFotoACarregar);
-
-      // atualizar o STATE
-      this.setState({
-        fotos: [...this.state.fotos, fotoCriada]
-      });
+      await adicionaFoto(dadosDaFotoACarregar);
 
       // 3.
-      await this.LoadFotos;
+      await this.LoadFotos();
 
+      /* 
+        // em alternativa ao ponto 2. e 3. poderia ser executado este código
+        // contudo, neste exemplo não iria funcionar bem, porque a API
+        // não está a devolver UMA fotografia com a mesma estrutura de dados
+        // com que devolve a LISTA, fazendo com que a atualização do STATE seja 
+        // efetuada de forma incorreta
+
+        let fotoCriada = await adicionaFoto(dadosDaFotoACarregar);
+
+        // atualizar o STATE
+        this.setState({
+          fotos: [...this.state.fotos, fotoCriada]
+        });
+      */
     } catch (erro) {
       console.error("não consegui inserir os dados da fotografia", erro);
     }
